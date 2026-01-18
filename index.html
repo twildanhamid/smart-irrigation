@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Irrigation System</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="dashboard">
+  <h1>🌱 Smart Irrigation System</h1>
+  <p class="subtitle">Naive Bayes Based Automatic Irrigation</p>
+
+  <div class="grid">
+
+    <!-- INPUT SENSOR -->
+    <div class="card">
+      <h2>Input Sensor</h2>
+
+      <label>Suhu (°C)</label>
+      <input type="number" id="suhu" placeholder="Contoh: 28">
+
+      <label>Kelembapan Tanah (%)</label>
+      <input type="number" id="tanah" placeholder="Contoh: 45">
+
+      <button onclick="prediksi()">Prediksi Manual</button>
+      <button class="auto" id="btnAuto">Mode Otomatis</button>
+
+
+    </div>
+
+    <!-- STATUS SISTEM -->
+    <div class="card">
+      <h2>Status Sistem</h2>
+
+      <div id="status" class="status">-</div>
+      <p id="detail">Suhu: - | Tanah: -</p>
+      <p id="probabilitas">P(ON): - | P(OFF): -</p>
+      <p id="confidence">Confidence: -</p>
+      <p id="kondisi">-</p>
+    </div>
+
+  </div>
+
+  <!-- GRAFIK -->
+  <div class="card">
+    <h2>Grafik Probabilitas</h2>
+    <canvas id="chart"></canvas>
+  </div>
+
+  <!-- RIWAYAT -->
+  <div class="card">
+    <h2>Riwayat Prediksi</h2>
+    <ul id="riwayat"></ul>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

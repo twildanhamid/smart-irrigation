@@ -1,0 +1,116 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #a5d6a7, #e8f5e9);
+}
+
+.dashboard {
+  max-width: 1100px;
+  margin: auto;
+  padding: 30px;
+}
+
+h1 {
+  text-align: center;
+  color: #1b5e20;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #2e7d32;
+  margin-bottom: 30px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card h2 {
+  color: #2e7d32;
+  margin-bottom: 15px;
+}
+
+/* FORM */
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  background: #2e7d32;
+  color: #ffffff;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #1b5e20;
+}
+
+button.auto {
+  background: #0277bd;
+}
+
+button.auto:hover {
+  background: #01579b;
+}
+
+/* STATUS */
+.status {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.status.on {
+  color: #2e7d32;
+}
+
+.status.off {
+  color: #c62828;
+}
+
+/* RIWAYAT */
+ul {
+  padding-left: 20px;
+}
+
+ul li {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

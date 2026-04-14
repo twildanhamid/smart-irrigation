@@ -1,7 +1,14 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #a5d6a7, #e8f5e9);
+body{
+margin:0;
+font-family:Poppins,system-ui;
+
+background-image: url("wallpaper-dark.jpg.png");
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+background-attachment: fixed;
+
+min-height:100vh;
 }
 
 .dashboard {

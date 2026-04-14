@@ -1,64 +1,360 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Smart Irrigation System</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Irrigation PRO</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{box-sizing:border-box}
+
+/* ===== LIGHT MODE ===== */
+body{
+margin:0;
+font-family:Poppins,system-ui;
+background:url('wallpaper-dark') no-repeat center center fixed;
+background-size:cover;
+min-height:100vh;
+transition:0.3s;
+}
+
+.overlay{
+background:rgba(255,255,255,0.92);
+min-height:100vh;
+transition:0.3s;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:25px
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px
+}
+
+.title{
+font-size:28px;
+font-weight:600;
+color:#1f2937;
+display:flex;
+align-items:center;
+gap:10px
+}
+
+.logo{
+height:45px
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px
+}
+
+.card{
+background:white;
+border-radius:20px;
+padding:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+transition:.25s
+}
+
+.card:hover{
+transform:translateY(-4px)
+}
+
+input{
+width:100%;
+padding:12px;
+border-radius:12px;
+border:1px solid #e5e7eb;
+margin-top:8px;
+margin-bottom:12px
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:14px;
+font-weight:600;
+background:#2563eb;
+color:white;
+margin-top:10px;
+cursor:pointer;
+transition:.2s
+}
+
+button:hover{
+background:#1d4ed8
+}
+
+.secondary{
+background:#0ea5e9
+}
+
+.secondary:hover{
+background:#0284c7
+}
+
+.status{
+font-size:30px;
+font-weight:700;
+text-align:center;
+margin:15px 0
+}
+
+.on{color:#16a34a}
+.off{color:#ef4444}
+
+.stat{
+background:#f9fafb;
+border-radius:14px;
+padding:12px;
+margin-top:10px
+}
+
+ul{padding-left:18px}
+
+/* ===== DARK MODE ===== */
+body.dark{
+background:url('wallpaper-dark.jpg') no-repeat center center fixed;
+background-size:cover;
+color:#e5e7eb;
+}
+
+body.dark .overlay{
+background:rgba(15,23,42,0.92);
+}
+
+body.dark .card{
+background:#1e293b;
+color:#e5e7eb;
+}
+
+body.dark .stat{
+background:#020617;
+}
+
+body.dark input{
+background:#0f172a;
+color:white;
+border:1px solid #334155;
+}
+
+body.dark .title{
+color:white;
+}
+
+@media(max-width:850px){
+.grid{grid-template-columns:1fr}
+}
+</style>
 </head>
+
 <body>
 
-<div class="dashboard">
-  <h1>🌱 Smart Irrigation System</h1>
-  <p class="subtitle">Naive Bayes Based Automatic Irrigation</p>
+<div class="overlay">
+<div class="container">
 
-  <div class="grid">
-
-    <!-- INPUT SENSOR -->
-    <div class="card">
-      <h2>Input Sensor</h2>
-
-      <label>Suhu (°C)</label>
-      <input type="number" id="suhu" placeholder="Contoh: 28">
-
-      <label>Kelembapan Tanah (%)</label>
-      <input type="number" id="tanah" placeholder="Contoh: 45">
-
-      <button onclick="prediksi()">Prediksi Manual</button>
-      <button class="auto" id="btnAuto">Mode Otomatis</button>
-
-
-    </div>
-
-    <!-- STATUS SISTEM -->
-    <div class="card">
-      <h2>Status Sistem</h2>
-
-      <div id="status" class="status">-</div>
-      <p id="detail">Suhu: - | Tanah: -</p>
-      <p id="probabilitas">P(ON): - | P(OFF): -</p>
-      <p id="confidence">Confidence: -</p>
-      <p id="kondisi">-</p>
-    </div>
-
-  </div>
-
-  <!-- GRAFIK -->
-  <div class="card">
-    <h2>Grafik Probabilitas</h2>
-    <canvas id="chart"></canvas>
-  </div>
-
-  <!-- RIWAYAT -->
-  <div class="card">
-    <h2>Riwayat Prediksi</h2>
-    <ul id="riwayat"></ul>
-  </div>
+<div class="header">
+<div class="title">
+<img src="logo.png.png" class="logo">
+Smart Irrigation Dashboard
 </div>
 
-<script src="script.js"></script>
+<button onclick="toggleTheme()">Dark Mode</button>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>Input Sensor</h3>
+<input id="suhu" type="number" placeholder="Suhu (°C)">
+<input id="tanah" type="number" placeholder="Kelembapan Tanah (%)">
+<button onclick="prediksi()">Prediksi Manual</button>
+<button class="secondary" onclick="autoMode()">Auto Mode</button>
+<button onclick="exportCSV()">Export Dataset</button>
+</div>
+
+<div class="card">
+<h3>Status Sistem</h3>
+<div id="status" class="status">-</div>
+<div id="prob" class="stat">Probabilitas: -</div>
+<div id="timer" class="stat">Durasi Pompa: 0 detik</div>
+<div id="realtime" class="stat">Mode: Manual</div>
+</div>
+
+</div>
+
+<div class="card" style="margin-top:20px">
+<canvas id="chart"></canvas>
+</div>
+
+<div class="card" style="margin-top:20px">
+<h3>Riwayat</h3>
+<ul id="log"></ul>
+</div>
+
+</div>
+</div>
+
+<script>
+
+let auto=false,autoTimer=null,pumpStart=0,timerInt;
+
+const dataLatih=[
+{s:'tinggi',t:'kering',l:'ON'},
+{s:'normal',t:'kering',l:'ON'},
+{s:'normal',t:'lembap',l:'OFF'},
+{s:'rendah',t:'basah',l:'OFF'}
+];
+
+function katS(x){
+return x>30?'tinggi':x>=25?'normal':'rendah'
+}
+
+function katT(x){
+return x<40?'kering':x<=70?'lembap':'basah'
+}
+
+function prob(label,s,t){
+let d=dataLatih.filter(x=>x.l==label);
+let p=d.length/dataLatih.length;
+let ps=d.filter(x=>x.s==s).length/d.length||0.01;
+let pt=d.filter(x=>x.t==t).length/d.length||0.01;
+return p*ps*pt
+}
+
+const chart=new Chart(
+ document.getElementById('chart'),
+ {
+ type:'bar',
+ data:{
+ labels:['ON','OFF'],
+ datasets:[{label:'Probabilitas',data:[0,0]}]
+ }
+ }
+);
+
+function setStatus(k){
+let el=document.getElementById('status');
+
+el.textContent=k;
+el.className='status '+(k=='ON'?'on':'off');
+
+if(k=='ON'){
+
+pumpStart=Date.now();
+clearInterval(timerInt);
+
+ timerInt=setInterval(()=>{
+ document.getElementById('timer').textContent=
+ 'Durasi Pompa: '+
+ Math.floor((Date.now()-pumpStart)/1000)+' detik'
+},1000)
+
+}
+
+else clearInterval(timerInt)
+}
+
+function log(k){
+let li=document.createElement('li');
+
+li.textContent=
+new Date().toLocaleTimeString()+' → '+k;
+
+ document.getElementById('log').prepend(li);
+
+localStorage.setItem(
+'riwayat',
+ document.getElementById('log').innerHTML
+)
+}
+
+function prediksi(){
+let s=parseFloat(suhu.value);
+let t=parseFloat(tanah.value);
+
+if(isNaN(s)||isNaN(t))return;
+
+let pON=prob('ON',katS(s),katT(t));
+let pOFF=prob('OFF',katS(s),katT(t));
+
+chart.data.datasets[0].data=[pON,pOFF];
+chart.update();
+
+ document.getElementById('prob').textContent=
+'Probabilitas ON: '+pON.toFixed(3)+
+' | OFF: '+pOFF.toFixed(3);
+
+let k=pON>pOFF?'ON':'OFF';
+
+setStatus(k);
+log(k);
+
+if(pON>0.8)
+alert('Tanah sangat kering! Penyiraman direkomendasikan');
+}
+
+function runAuto(){
+suhu.value=(24+Math.random()*10).toFixed(1);
+ tanah.value=(35+Math.random()*45).toFixed(1);
+prediksi()
+}
+
+function autoMode(){
+auto=!auto;
+
+ document.getElementById('realtime').textContent=
+ auto?
+ 'Mode: Real-Time Otomatis':
+ 'Mode: Manual';
+
+if(auto){
+runAuto();
+autoTimer=setInterval(runAuto,2000)
+}
+else clearInterval(autoTimer)
+}
+
+function exportCSV(){
+let text='time,status\n';
+
+ document.querySelectorAll('#log li')
+.forEach(li=>
+ text+=li.textContent.replace(' → ',',')+'\n'
+);
+
+let blob=new Blob([text]);
+
+let a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);
+ a.download='dataset.csv';
+ a.click()
+}
+
+/* ===== DARK MODE FIX ===== */
+function toggleTheme(){
+ document.body.classList.toggle('dark');
+}
+
+window.onload=()=>{
+let r=localStorage.getItem('riwayat');
+if(r)
+ document.getElementById('log').innerHTML=r
+}
+
+</script>
 
 </body>
 </html>
